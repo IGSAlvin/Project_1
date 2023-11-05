@@ -4,6 +4,18 @@ from tkinter import messagebox
 from PIL import Image, ImageTk
 import ttkbootstrap
 
+def get_weather(city):
+    API_key = ""
+    url = f""
+    res = requests.get(url)
+    
+def city_search():
+    city = city_fill.get()
+    result = get_weather(city):
+    if result is None:
+        return
+
+
 root = ttkbootstrap.Window(themename="morph")
 root.title("Weather App")
 root.geometry("400x400")
