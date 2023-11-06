@@ -1,4 +1,4 @@
-import tkinker as tk
+import tkinter as tk
 import requests
 from tkinter import messagebox
 from PIL import Image, ImageTk
@@ -11,7 +11,7 @@ def get_weather(city):
     
 def city_search():
     city = city_fill.get()
-    result = get_weather(city):
+    result = get_weather(city)
     if result is None:
         return
 
