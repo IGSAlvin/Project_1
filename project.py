@@ -28,8 +28,16 @@ def city_search():
     result = get_weather(city)
     if result is None:
         return
+    
+    icon_url, temperature, description, city, country = result
+    location_label.configure(text=f"{city}, {country}")
+    image = image.open(requests.get(icon_url, stream=True).raw)
+    icon = ImageTk.PhotoImage(image)
+    icon_label.configure(image=icon)
+    icon_label.image = icon
 
-
+    temperature_label.configure(text=f"Temperature: {temperature:.2f}°C")
+    description_label.configure(text=f"Description: {description}")
 root = ttkbootstrap.Window(themename="morph")
 root.title("Weather App")
 root.geometry("400x400")
@@ -37,10 +45,13 @@ root.geometry("400x400")
 city_fill = ttkbootstrap.Entry(root, font="Arial, 14")
 city_fill.pack(pady=10)
 
+location_label = tk.Label(root, font="Helvetica, 25")
+location_label.pack(pady=20)
+
 icon_label = tk.Label(root)
 icon_label.pack()
 
-temperature_label = tk.label(root, font="Arial, 16")
+temperature_label = tk.Label(root, font="Arial, 20")
 temperature_label.pack()
 
 description_label = tk.Label(root, font="Arial, 16")
