@@ -1,12 +1,11 @@
-import datetime
+
 import api
 import tkinter as tk
-import geopy
 import requests
 from tkinter import messagebox, ttk
 from PIL import Image, ImageTk
 import ttkbootstrap
-
+from ttkbootstrap import Style
 
 def get_weather(city):
     
@@ -21,15 +20,18 @@ def get_weather(city):
     weather = res.json()
     icon_id = weather['weather'][0]['icon']
     temperature = round(weather['main']['temp'] - 273.15, 2)
+    min_temp = weather['main']['temp_min'] - 273.15
+    max_temp = weather['main']['temp_max'] - 273.15
     description = weather['weather'][0]['description']
-    mainweather = weather['weather']['main']
+    mainweather = weather['weather'][0]['main']
+    wind_spd = weather['wind']['speed']
     city = weather['name']
     country = weather['sys']['country']
 
 
 
     icon_url = f"https://openweathermap.org/img/wn/{icon_id}@2x.png"
-    return(icon_url, temperature, description, city, country, mainweather)
+    return(icon_url, temperature, description, city, country, mainweather, max_temp, min_temp, wind_spd)
 
 # def forecast(city):
 #     from geopy.geocoders import Nominatim
@@ -72,7 +74,7 @@ def search():
     if result is None:
         return 0
     
-    icon_url, temperature, description, city, country, mainweather = result
+    icon_url, temperature, description, city, country, mainweather, min_temp, max_temp, wind_spd = result
     location_label.configure(text=f"{city}, {country}")
 
     image1 = Image.open(requests.get(icon_url, stream=True).raw)
@@ -80,14 +82,15 @@ def search():
     icon_label.configure(image=icon1)
     icon_label.image = icon1
 
-    temperature_label.configure(text=f"Temperature: {temperature:.2f}°C")
+    temperature_label.configure(text=f"Temperature: {temperature:.2f}°C \n min_temperature: {min_temp:.2f}°C \n max_temperature: {max_temp:.2f}°C")
     description_label.configure(text=f"Description: {description}")
 
-    status_label.configure(text=f"real-time-status: {mainweather}")
-    
-    
+    status_label.configure(text=f"status: {mainweather}")
+    wind_label.configure(text=f"wind speed: {wind_spd} m/s")
 
-root = ttkbootstrap.Window(themename="journal")
+root = tk.Tk()
+style = Style('journal')
+root.configure(background=style.colors.primary)
 root.title("Weather App")
 root.geometry("600x800")
 
@@ -96,6 +99,7 @@ city_fill.pack(pady=10)
 
 search_button = ttkbootstrap.Button(root, text="Search", command=search, bootstyle="warning")
 search_button.pack(pady=10)
+
 
 location_label = tk.Label(root, font="Helvetica, 25")
 location_label.pack(pady=20)
@@ -111,4 +115,11 @@ description_label.pack()
 
 status_label = tk.Label(root, font="Helvetica, 20")
 status_label.pack()
+
+wind_label = tk.Label(root, font="Helvetica, 20")
+wind_label.pack()
+
 root.mainloop()
+
+
+
