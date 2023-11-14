@@ -14,7 +14,7 @@ Pillow (PIL) library
 ttkbootstrap is optional for design purposes
 
 Usage
-Launch the application.
+Launch the application using python with py project.py in the terminal.
 
 Enter the name of the city in the provided entry field.
 
